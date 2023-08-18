@@ -5,14 +5,14 @@ WORKDIR /var/www/html
 RUN apk --no-cache update && \
     apk --no-cache upgrade && \
     apk --no-cache add \
-    mysql-client msmtp perl wget procps shadow libzip libwebp freetype icu \
+    mysql-client msmtp perl wget procps shadow libzip libjpeg-turbo libwebp freetype icu \
     openssl supervisor git vim unzip fcgi
 
 RUN apk add --no-cache --virtual build-essentials \
     icu-dev icu-libs zlib-dev g++ make automake autoconf libzip-dev \
     libpng-dev libwebp-dev libjpeg-turbo-dev freetype-dev && \
     docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp && \
-    docker-php-ext-install gd && \
+    docker-php-ext-install -j"$(nproc)" gd && \
     docker-php-ext-install mysqli && \
     docker-php-ext-install pdo_mysql && \
     docker-php-ext-install intl && \
