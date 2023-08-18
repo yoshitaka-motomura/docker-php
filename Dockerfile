@@ -30,9 +30,8 @@ RUN apk --update --no-cache add tzdata && \
     apk del tzdata && \
     rm -rf /var/cache/apk/*
 
-# COPY ./configure/php/php.ini /usr/local/etc/php
-# COPY ./configure/php/upload.ini /usr/local/etc/php/conf.d/uploads.ini
-# COPY ./configure/php/date.ini /usr/local/etc/php/conf.d/date.ini
+## PHP Config
+COPY ./configure/php/php.ini-production /usr/local/etc/php/php.ini
 
 ## Supervisor
 COPY ./configure/supervisor/supervisord.conf /etc/supervisord.conf
