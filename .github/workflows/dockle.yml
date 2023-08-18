@@ -1,0 +1,25 @@
+name: Dockles
+on:
+    push:
+        branches-ignore:
+            - main
+        paths:
+            - Dockerfile
+env:
+    DOCKER_IMAGE_TAG: 'docker-image'
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: checkout
+              uses: actions/checkout@v3
+            
+            - name: docker build
+              run:
+                docker build -f Dockerfile -t ${{ env.DOCKER_IMAGE_TAG }} .
+            - name: dockle run 
+              uses: erzz/dockle-action@v1
+              with:
+                image: ${{ env.DOCKER_IMAGE_TAG }}
+                exit-code: 1
+                failure-threshold: fatal
