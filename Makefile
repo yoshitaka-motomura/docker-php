@@ -9,3 +9,5 @@ build:
 scout:
 	@docker scout quickview $(IMAGE_NAME):$(IMAGE_TAG)
 	@docker scout cves $(IMAGE_NAME):$(IMAGE_TAG)
+push:
+	@docker push $(IMAGE_NAME):$(IMAGE_TAG)
