@@ -6,7 +6,8 @@ on:
         paths:
             - Dockerfile
 env:
-    DOCKER_IMAGE_TAG: 'docker-image'
+    DOCKER_IMAGE_TAG: 'docker-image:test'
+    SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
 jobs:
     build:
         runs-on: ubuntu-latest
@@ -23,3 +24,21 @@ jobs:
                 image: ${{ env.DOCKER_IMAGE_TAG }}
                 exit-code: 1
                 failure-threshold: fatal
+            
+            - name: slack-notification-success
+              if: ${{ success() }}
+              uses: rtCamp/action-slack-notify@v2.1.0
+              env:
+                SLACK_WEBHOOK: ${{ env.SLACK_WEBHOOK }}
+                SLACK_COLOR: good
+                SLACK_TITLE: 'Docker Image Dockle Scan'
+                SLACK_MESSAGE: 'Docker Image Dockle Scan Success'
+            
+            - name: slack-notification-failure
+              if: ${{ failure() }}
+              uses: rtCamp/action-slack-notify@v2.1.0
+              env:
+                SLACK_COLOR: danger
+                SLACK_WEBHOOK: ${{ env.SLACK_WEBHOOK }}
+                SLACK_TITLE: 'Docker Image Dockle Scan'
+                SLACK_MESSAGE: 'Docker Image Dockle Scan Failed'
