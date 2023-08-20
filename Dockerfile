@@ -36,7 +36,8 @@ COPY ./configure/php/php.ini-production /usr/local/etc/php/php.ini
 ## Supervisor
 COPY ./configure/supervisor/supervisord.conf /etc/supervisord.conf
 RUN mkdir -p /etc/supervisor.d \
-    && touch /var/log/supervisord.log
+    && touch /var/log/supervisord.log && \
+    touch /var/run/supervisord.pid
 
 
 ## Composer Install
@@ -44,10 +45,15 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 ARG USER_ID="1000"
 ARG GROUP_ID="10001"
-ARG USER_NAME="docker-user"
+ARG USER_NAME="web"
 
 RUN addgroup -S -g "${GROUP_ID}" "${USER_NAME}" \
   && adduser -u "${USER_ID}" -G "${USER_NAME}" -D "${USER_NAME}"
+
+RUN chown ${USER_NAME} /var/log/supervisord.log && \
+    chmod 777 /var/log/supervisord.log && \
+    chown ${USER_NAME} /var/run/supervisord.pid
+
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
     CMD SCRIPT_NAME=/ping \
