@@ -1,13 +1,22 @@
-IMAGE_NAME=staydaybreak/php
-IMAGE_TAG=8.2.8-fpm-alpine
-buildx:
-	@docker buildx build --no-cache -t $(IMAGE_NAME):$(IMAGE_TAG) -f Dockerfile . --push
-
+include .env
+export $(shell sed 's/=.*//' .env)
 build:
-	@docker build -t $(IMAGE_NAME):$(IMAGE_TAG) -f Dockerfile . --no-cache
+	@make auth
+	@if [ -z "$(IMAGE_TAG)" ]; then \
+		IMAGE_TAG=latest; \
+	fi
+	@if [ -z "$(IMAGE_NAME)" ]; then \
+		echo "IMAGE_NAME is empty"; \
+		exit 1; \
+	fi
 
+	@docker buildx build --no-cache -t $(IMAGE_NAME):$(IMAGE_TAG) -f Dockerfile . --push
 scout:
 	@docker scout quickview $(IMAGE_NAME):$(IMAGE_TAG)
 	@docker scout cves $(IMAGE_NAME):$(IMAGE_TAG)
-push:
-	@docker push $(IMAGE_NAME):$(IMAGE_TAG)
+auth:
+	@if [ -z "$(TOKEN)" ]; then \
+		echo "TOKEN is empty"; \
+		exit 1; \
+	fi
+	@echo $(TOKEN) | docker login ghcr.io -u $(USERNAME) --password-stdin

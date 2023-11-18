@@ -1,4 +1,4 @@
-FROM php:8.2.8-fpm-alpine3.18
+FROM php:8.2.12-fpm-alpine3.18
 
 WORKDIR /var/www/html
 
@@ -48,7 +48,7 @@ ARG GROUP_ID="10001"
 ARG USER_NAME="web"
 
 RUN addgroup -S -g "${GROUP_ID}" "${USER_NAME}" \
-  && adduser -u "${USER_ID}" -G "${USER_NAME}" -D "${USER_NAME}"
+    && adduser -u "${USER_ID}" -G "${USER_NAME}" -D "${USER_NAME}"
 
 RUN chown ${USER_NAME} /var/log/supervisord.log && \
     chmod 777 /var/log/supervisord.log && \
