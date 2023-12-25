@@ -10,7 +10,7 @@ build:
 		exit 1; \
 	fi
 
-	@docker buildx build --no-cache -t $(IMAGE_NAME):$(IMAGE_TAG) -f Dockerfile . --push
+	@docker buildx build --platform linux/amd64 --no-cache  -t $(IMAGE_NAME):$(IMAGE_TAG) -f Dockerfile . --push
 scout:
 	@docker scout quickview $(IMAGE_NAME):$(IMAGE_TAG)
 	@docker scout cves $(IMAGE_NAME):$(IMAGE_TAG)
