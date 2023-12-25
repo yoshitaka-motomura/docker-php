@@ -1,4 +1,4 @@
-FROM php:8.2.12-fpm-alpine3.18
+FROM php:8.2.13-fpm-alpine3.18
 
 WORKDIR /var/www/html
 
@@ -43,18 +43,6 @@ RUN mkdir -p /etc/supervisor.d \
 ## Composer Install
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-ARG USER_ID="1000"
-ARG GROUP_ID="10001"
-ARG USER_NAME="web"
-
-RUN addgroup -S -g "${GROUP_ID}" "${USER_NAME}" \
-    && adduser -u "${USER_ID}" -G "${USER_NAME}" -D "${USER_NAME}"
-
-RUN chown ${USER_NAME} /var/log/supervisord.log && \
-    chmod 777 /var/log/supervisord.log && \
-    chown ${USER_NAME} /var/run/supervisord.pid
-
-
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
     CMD SCRIPT_NAME=/ping \
     SCRIPT_FILENAME=/ping \
@@ -73,8 +61,6 @@ RUN \
     chmod u-s /usr/bin/chfn && \
     chmod g-s /sbin/unix_chkpwd && \
     chmod u-s /usr/bin/expiry
-
-USER ${USER_ID}
 
 EXPOSE 9000
 
