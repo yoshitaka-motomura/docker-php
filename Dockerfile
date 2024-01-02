@@ -1,4 +1,4 @@
-FROM php:8.2.13-fpm-alpine3.18
+FROM php:8.2.14-fpm-alpine3.18
 
 WORKDIR /var/www/html
 
@@ -43,11 +43,11 @@ RUN mkdir -p /etc/supervisor.d \
 ## Composer Install
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
-    CMD SCRIPT_NAME=/ping \
-    SCRIPT_FILENAME=/ping \
-    REQUEST_METHOD=GET \
-    cgi-fcgi -bind -connect 127.0.0.1:9000  || exit 1
+# HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+#     CMD SCRIPT_NAME=/ping \
+#     SCRIPT_FILENAME=/ping \
+#     REQUEST_METHOD=GET \
+#     cgi-fcgi -bind -connect 127.0.0.1:9000  || exit 1
 
 #########
 ## CIS-DI-0008
