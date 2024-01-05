@@ -1,5 +1,7 @@
 FROM php:8.3.1-fpm-alpine3.19
 
+LABEL org.opencontainers.image.description = "custom php-fpm image based on php:8.3.1-fpm-alpine3.19"
+
 WORKDIR /var/www/html
 
 RUN apk --no-cache update && \

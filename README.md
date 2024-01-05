@@ -1,21 +1,16 @@
-# Docker php image v8.2
+# Development Docker Images for PHP-fpm
 
 [![Dockles](https://github.com/yoshitaka-motomura/docker-php-image/actions/workflows/dockle.yml/badge.svg?branch=main)](https://github.com/yoshitaka-motomura/docker-php-image/actions/workflows/dockle.yml)
-## Overview
 
-docker php8.2-fpm image.
-This image is for Laravel 10. The installed extensions are listed below.
+--- 
+## Description
+This image is based on php-fpm (alpine) and has supervisor and composer installed in advance, so it is an image for Laravel development.
 
-docker image
-```
-docker pull ghcr.io/yoshitaka-motomura/php:8.2.13
-```
+The default time zone is Asia/Tokyo.
 
-##　Build
+## Tags
+- 8.2.13
+- 8.2.14
+- 8.3.1
 
-```
-export DOCKER_CONTENT_TRUST=1
-make build
-```
-
-- https://github.com/goodwithtech/dockle/blob/master/CHECKPOINT.md
+[packages](https://github.com/yoshitaka-motomura/docker-php-image/pkgs/container/php)
