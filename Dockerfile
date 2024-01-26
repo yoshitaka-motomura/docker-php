@@ -1,6 +1,8 @@
-FROM php:8.3.1-fpm-alpine3.19
+ARG PHP_VERSION=8.3.1
 
-LABEL org.opencontainers.image.description = "custom php-fpm image based on php:8.3.1-fpm-alpine3.19"
+FROM php:${PHP_VERSION}-fpm-alpine3.19
+
+LABEL org.opencontainers.image.description = "custom php-fpm image"
 
 WORKDIR /var/www/html
 
