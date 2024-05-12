@@ -22,6 +22,12 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Login to ECR
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-1
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -31,4 +37,6 @@ jobs:
           push: true
           build-args: |
             PHP_VERSION=${{ github.ref_name }}
-          tags: ghcr.io/yoshitaka-motomura/php:${{ github.ref_name }}
+          tags: |
+            ghcr.io/yoshitaka-motomura/php:${{ github.ref_name }}
+            ${{ secrets.AWS_ECR_REPOSITORY_URL }}/bare-php:${{ github.ref_name }}
