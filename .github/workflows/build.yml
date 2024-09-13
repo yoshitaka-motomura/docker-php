@@ -12,15 +12,7 @@ jobs:
       - name: Check Version
         run: |
           PHP_VERSION="${{ github.event.inputs.php_version }}"
-          # Check the version using php.net API
-          RESPONSE=$(curl -s https://www.php.net/releases/index.php?json&version="$PHP_VERSION")
-          if [[ "$RESPONSE" == "false" || -z "$RESPONSE" ]]; then
-            echo "PHP version $PHP_VERSION does not exist."
-            exit 1
-          else
-            echo "PHP version $PHP_VERSION is valid."
-          fi
-
+          sh ./scripts/check_version.sh $PHP_VERSION
       # - name: Check Out Repo
       #   uses: actions/checkout@v4
       # - name: Set up QEMU
