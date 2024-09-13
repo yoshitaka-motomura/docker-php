@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## 引数を受け取る
+# ## 引数を受け取る
 VERSON=$1
 
 RESPONSE=$(curl -s "https://www.php.net/releases/index.php?json&version={$VERSON}" | jq ".version")

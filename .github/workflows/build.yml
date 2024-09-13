@@ -9,12 +9,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Check Out Repo
+        uses: actions/checkout@v4
+      - name: Make script executable
+        run: chmod +x ./scripts/check-version.sh
       - name: Check Version
         run: |
           PHP_VERSION="${{ github.event.inputs.php_version }}"
-          sh ./scripts/check_version.sh $PHP_VERSION
-      # - name: Check Out Repo
-      #   uses: actions/checkout@v4
+          sh ./scripts/check-version.sh $PHP_VERSION
       # - name: Set up QEMU
       #   uses: docker/setup-qemu-action@v3
       # - name: Set up Docker Buildx
