@@ -2,7 +2,7 @@ ARG PHP_VERSION=8.3.1
 
 FROM php:${PHP_VERSION}-fpm-alpine
 
-LABEL org.opencontainers.image.description = "custom php-fpm image"
+LABEL org.opencontainers.image.description "PHP-FPM Custom Image"
 
 WORKDIR /var/www/html
 
