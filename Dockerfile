@@ -2,7 +2,7 @@ ARG PHP_VERSION=8.3.1
 
 FROM php:${PHP_VERSION}-fpm-alpine
 
-LABEL org.opencontainers.image.description "PHP-FPM Custom Image"
+LABEL "org.opencontainers.image.description"="PHP-FPM Custom Image"
 
 WORKDIR /var/www/html
 
@@ -10,7 +10,7 @@ RUN apk --no-cache update && \
     apk --no-cache upgrade && \
     apk --no-cache add \
     mysql-client msmtp perl wget procps shadow libzip libjpeg-turbo libwebp freetype icu \
-    openssl supervisor git vim unzip fcgi
+    openssl supervisor git vim unzip fcgi libgcc
 
 RUN apk add --no-cache --virtual build-essentials \
     icu-dev icu-libs zlib-dev g++ make automake autoconf libzip-dev \
@@ -46,6 +46,10 @@ RUN mkdir -p /etc/supervisor.d \
 
 ## Composer Install
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+## Datadog Trace
+RUN curl -LO https://github.com/DataDog/dd-trace-php/releases/latest/download/datadog-setup.php && \
+    php datadog-setup.php --php-bin=all --enable-appsec --enable-profiling
 
 # HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
 #     CMD SCRIPT_NAME=/ping \
