@@ -6,6 +6,7 @@ LABEL "org.opencontainers.image.description"="PHP-FPM Custom Image"
 
 WORKDIR /var/www/html
 
+# Install dependencies and PHP extensions
 RUN apk --no-cache update && \
     apk --no-cache upgrade && \
     apk --no-cache add \
@@ -16,51 +17,49 @@ RUN apk add --no-cache --virtual build-essentials \
     icu-dev icu-libs zlib-dev g++ make automake autoconf libzip-dev \
     libpng-dev libwebp-dev libjpeg-turbo-dev freetype-dev && \
     docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp && \
-    docker-php-ext-install -j"$(nproc)" gd && \
-    docker-php-ext-install mysqli && \
-    docker-php-ext-install pdo_mysql && \
-    docker-php-ext-install intl && \
-    docker-php-ext-install opcache && \
-    docker-php-ext-install exif && \
-    docker-php-ext-install zip && \
+    docker-php-ext-install -j"$(nproc)" \
+    gd \
+    mysqli \
+    pdo_mysql \
+    intl \
+    opcache \
+    exif \
+    zip \
+    bcmath \
+    pcntl && \
     pecl install redis && \
     pecl install mongodb && \
-    docker-php-ext-enable mongodb && \
-    docker-php-ext-enable redis && \
+    pecl install apcu && \
+    docker-php-ext-enable \
+    mongodb \
+    redis \
+    apcu && \
     apk del build-essentials && rm -rf /usr/src/php*
 
+# Set timezone
 RUN apk --update --no-cache add tzdata && \
     cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
+    echo "Asia/Tokyo" > /etc/timezone && \
     apk del tzdata && \
     rm -rf /var/cache/apk/*
 
-## PHP Config
+# PHP Config
 COPY ./configure/php/php.ini-production /usr/local/etc/php/php.ini
 
-## Supervisor
+# Supervisor
 COPY ./configure/supervisor/supervisord.conf /etc/supervisord.conf
 RUN mkdir -p /etc/supervisor.d \
-    && touch /var/log/supervisord.log && \
-    touch /var/run/supervisord.pid
+    && touch /var/log/supervisord.log \
+    && touch /var/run/supervisord.pid
 
-
-## Composer Install
+# Composer Install
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-## Datadog Trace
+# Datadog Trace
 RUN curl -LO https://github.com/DataDog/dd-trace-php/releases/latest/download/datadog-setup.php && \
     php datadog-setup.php --php-bin=all --enable-appsec --enable-profiling
 
-# HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
-#     CMD SCRIPT_NAME=/ping \
-#     SCRIPT_FILENAME=/ping \
-#     REQUEST_METHOD=GET \
-#     cgi-fcgi -bind -connect 127.0.0.1:9000  || exit 1
-
-#########
-## CIS-DI-0008
-#########
-
+# Security hardening
 RUN \
     chmod u-s /usr/bin/chsh && \
     chmod u-s /usr/bin/gpasswd && \
@@ -72,4 +71,4 @@ RUN \
 
 EXPOSE 9000
 
-ENTRYPOINT ["/usr/bin/supervisord", "-n","-c", "/etc/supervisord.conf"]
+ENTRYPOINT ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf"]
