@@ -8,9 +8,6 @@ This image is based on php-fpm (alpine) and has supervisor and composer installe
 
 The default time zone is Asia/Tokyo.
 
-## Tags
-- 8.2.13
-- 8.2.14
-- 8.3.1
+## Instelled Extensions
 
-[packages](https://github.com/yoshitaka-motomura/docker-php-image/pkgs/container/php)
+- datadog-php-tracer
