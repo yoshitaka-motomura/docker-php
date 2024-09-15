@@ -2,7 +2,7 @@ ARG PHP_VERSION=8.3.1
 
 FROM php:${PHP_VERSION}-fpm-alpine
 
-LABEL "org.opencontainers.image.description"="PHP-FPM Custom Image"
+LABEL "org.opencontainers.image.description"="PHP-FPM Custom Image with PostgreSQL and Memcached"
 
 WORKDIR /var/www/html
 
@@ -11,7 +11,8 @@ RUN apk --no-cache update && \
     apk --no-cache upgrade && \
     apk --no-cache add \
     mysql-client msmtp perl wget procps shadow libzip libjpeg-turbo libwebp freetype icu \
-    openssl supervisor git vim unzip fcgi libgcc
+    openssl supervisor git vim unzip fcgi libgcc \
+    postgresql-dev libmemcached-dev
 
 RUN apk add --no-cache --virtual build-essentials \
     icu-dev icu-libs zlib-dev g++ make automake autoconf libzip-dev \
@@ -21,6 +22,7 @@ RUN apk add --no-cache --virtual build-essentials \
     gd \
     mysqli \
     pdo_mysql \
+    pdo_pgsql \
     intl \
     opcache \
     exif \
@@ -30,10 +32,12 @@ RUN apk add --no-cache --virtual build-essentials \
     pecl install redis && \
     pecl install mongodb && \
     pecl install apcu && \
+    pecl install memcached && \
     docker-php-ext-enable \
     mongodb \
     redis \
-    apcu && \
+    apcu \
+    memcached && \
     apk del build-essentials && rm -rf /usr/src/php*
 
 # Set timezone

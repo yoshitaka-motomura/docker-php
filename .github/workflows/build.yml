@@ -56,13 +56,13 @@ jobs:
           echo "" >> RELEASE_NOTES.md
           echo "## Changes in this release" >> RELEASE_NOTES.md
           echo "- PHP ${{ github.event.inputs.php_version }} Docker image is now available" >> RELEASE_NOTES.md
-          echo "- `docker pull ghcr.io/yoshitaka-motomura/php:${{ github.event.inputs.php_version }}`" >> RELEASE_NOTES.md
+          echo "- docker pull ghcr.io/yoshitaka-motomura/php:${{ github.event.inputs.php_version }}" >> RELEASE_NOTES.md
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.php_version }}-php
-          name: Available PHP${{ github.event.inputs.php_version }}
+          name: PHP${{ github.event.inputs.php_version }} Available
           body_path: RELEASE_NOTES.md
           draft: false
           prerelease: false

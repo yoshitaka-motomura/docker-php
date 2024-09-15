@@ -1,6 +1,6 @@
-# Development Docker Images for PHP-fpm
+# PHP-FPM Custom Docker Image
 
-[![Dockles](https://github.com/yoshitaka-motomura/docker-php-image/actions/workflows/dockle.yml/badge.svg?branch=main)](https://github.com/yoshitaka-motomura/docker-php-image/actions/workflows/dockle.yml)
+
 
 --- 
 ## Description
@@ -9,5 +9,58 @@ This image is based on php-fpm (alpine) and has supervisor and composer installe
 The default time zone is Asia/Tokyo.
 
 ## Instelled Extensions
+**[PHP Modules]**
+- apcu
+- bcmath
+- Core
+- ctype
+- curl
+- datadog-profiling
+- date
+- ddappsec
+- ddtrace
+- dom
+- exif
+- fileinfo
+- filter
+- gd
+- hash
+- iconv
+- intl
+- json
+- libxml
+- mbstring
+- mongodb
+- mysqli
+- mysqlnd
+- openssl
+- pcntl
+- pcre
+- PDO
+- pdo_mysql
+- pdo_sqlite
+- Phar
+- posix
+- random
+- readline
+- redis
+- Reflection
+- session
+- SimpleXML
+- sodium
+- SPL
+- sqlite3
+- standard
+- tokenizer
+- xml
+- xmlreader
+- xmlwriter
+- Zend OPcache
+- zip
+- zlib
 
-- datadog-php-tracer
+**[Zend Modules]**
+- Zend OPcache
+- datadog-profiling
+- ddappsec
+- ddtrace
