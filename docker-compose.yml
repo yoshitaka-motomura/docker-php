@@ -1,0 +1,12 @@
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "8888:80"
+    volumes:
+      - ./examples/webroot:/var/www/html
+      - ./examples/nginx/default.conf:/etc/nginx/conf.d/default.conf
+  php:
+    image: local-php-84:latest
+    volumes:
+      - ./examples/webroot:/var/www/html
